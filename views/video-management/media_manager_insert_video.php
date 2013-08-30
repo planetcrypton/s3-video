@@ -14,13 +14,14 @@ jQuery(function() {
 	  jQuery("#videoListTable").tablesorter();
 	  jQuery("#videoListTable").paginateTable({ rowsPerPage: <?php echo $pluginSettings['s3_video_page_result_limit']; ?>});	  
 	  	  
-	  jQuery(".insertVideo").click(function() {
+	  jQuery(".insertVideo").click(function(evt) {
+			evt.preventDefault();
 			var videoName = jQuery(this).attr("title");
 			jQuery("#insertVideoName").val(videoName);
 			jQuery("#insertVideoForm").submit();
 	  });
 	  
-	  jQuery(".colorBox").colorbox({width:"600", height:"400"});
+	  jQuery(".colorBox").colorbox({width:"600", height:"400", top:"70px"});
 });
 </script>
 
