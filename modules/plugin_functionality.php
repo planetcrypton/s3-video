@@ -32,7 +32,9 @@ function s3_video_check_plugin_settings($redirect = TRUE)
 							'amazon_video_folder' => get_option('amazon_video_folder'),
 							'amazon_s3_video_player' => get_option('amazon_s3_video_player'),
 							'amazon_s3_video_playerwidth' => get_option('amazon_s3_video_playerwidth'),	
-							'amazon_s3_video_playerheight' => get_option('amazon_s3_video_playerheight'),															
+							'amazon_s3_video_playerheight' => get_option('amazon_s3_video_playerheight'),	
+							#'amazon_s3_video_jwplayer_key' => get_option('amazon_s3_video_jwplayer_key'),	
+							'amazon_s3_video_jwplayer_token' => get_option('amazon_s3_video_jwplayer_token'),														
 							's3_video_page_result_limit' => get_option('s3_video_page_result_limit'),
 							'amazon_s3_video_autoplay' => get_option('amazon_s3_video_autoplay'),
 							'amazon_s3_video_autobuffer' => get_option('amazon_s3_video_autobuffer'),
@@ -106,7 +108,9 @@ function s3_video_plugin_settings()
 				
 			register_setting( 'amazon_s3_video_player', 'video_player' );	
 			register_setting( 'amazon_s3_video_playerwidth', 'video_playerwidth' );
-			register_setting( 'amazon_s3_video_playerheight', 'video_playerheight' );				
+			register_setting( 'amazon_s3_video_playerheight', 'video_playerheight' );
+			#register_setting( 'amazon_s3_video_jwplayer_key', 'video_jwplayer_key' );	
+			register_setting( 'amazon_s3_video_jwplayer_token', 'video_jwplayer_token' );			
 
 			update_option( 'amazon_access_key', trim($_POST['amazon_access_key'] ));
 			update_option( 'amazon_secret_access_key', trim($_POST['amazon_secret_access_key'] ));
@@ -115,7 +119,9 @@ function s3_video_plugin_settings()
 			
 			update_option( 'amazon_s3_video_player', trim($_POST['video_player'] ));
 			update_option( 'amazon_s3_video_playerwidth', trim($_POST['video_playerwidth'] ));
-			update_option( 'amazon_s3_video_playerheight', trim($_POST['video_playerheight'] ));						
+			update_option( 'amazon_s3_video_playerheight', trim($_POST['video_playerheight'] ));	
+			#update_option( 'amazon_s3_video_jwplayer_key', trim($_POST['jwplayer_key'] ));	
+			update_option( 'amazon_s3_video_jwplayer_token', get_jwplayer_token( $_POST['jwplayer_token'] ));				
 						
 			update_option( 'amazon_s3_video_autoplay', $_POST['video_autoplay'] );
 			update_option( 'amazon_s3_video_autobuffer', $_POST['video_autobuffer'] );
@@ -145,6 +151,20 @@ function s3_video_plugin_settings()
 	}
 
 	require_once(WP_PLUGIN_DIR . '/s3-video/views/settings/plugin_settings.php');
+}
+
+/*
+ * Retrieves token from
+ * JW Players Cloud-Hosted Player Code (<script>)
+ * else it's already there
+ */
+function get_jwplayer_token($string) {
+    $string = trim( stripslashes($string) );
+    preg_match( '/src="([^"]*).js"/i', $string, $matches ) ;
+    if( isset($matches[1]) ){
+    	return substr($matches[1], strrpos($matches[1],'/')+1, strlen($matches[1])) ;
+    }
+    return $string;
 }
 
 /*

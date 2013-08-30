@@ -20,6 +20,23 @@
 			JT_init();
 	
 			jQuery(':input[placeholder]').placeholder();
+			
+			
+			// Dis- or enable jwplayer_token element
+			// get enebaled when JWplayer is chosen
+			// when enabled it must be filled out since the field is required
+			var disable_jwplayer_token = function(checkbox){
+				if( checkbox.prop('checked') && checkbox.val() == 'jwplayer' ){
+					jwplayer_token_el.prop('disabled', false).removeClass('disabled');
+				}else{
+					jwplayer_token_el.prop('disabled', true).addClass('disabled');
+				}
+			}
+			var jwplayer_token_el = jQuery('#jwplayer_token');
+			jQuery('input[name = "video_player"]').change( function(evt){
+				disable_jwplayer_token( jQuery(this) )
+			});
+			disable_jwplayer_token( jQuery('input[name = "video_player"]:checked') );
 		
 	});	
 </script>
@@ -146,23 +163,43 @@
 				</td>
 
 				<td>
-					<?php if ((empty($pluginSettings['amazon_s3_video_player'])) || ($pluginSettings['amazon_s3_video_player'] == 'flowplayer')) { ?>
-							<input type="radio" name="video_player" value="flowplayer" checked> Flowplayer 
-							- <a href="<?php echo WP_PLUGIN_URL; ?>/s3-video/views/tips/flowplayer_info.html" class="jTip" id="flowplayerTip">More Info?</a> 							
-							- <a href="http://flowplayer.org/" target="_blank">Player Website</a>
-							<br />
-							<input type="radio" name="video_player" value="videojs"> VideoJS 
-							- <a href="<?php echo WP_PLUGIN_URL; ?>/s3-video/views/tips/videojs_info.html" class="jTip" id="videojsTip">More Info?</a>							
-							- <a href="http://videojs.com/" target="_blank">Player Website</a>
-					<?php } else { ?>	
-							<input type="radio" name="video_player" value="flowplayer"> Flowplayer 
-							- <a href="<?php echo WP_PLUGIN_URL; ?>/s3-video/views/tips/flowplayer_info.html" class="jTip" id="flowplayerTip">More Info?</a>							
-							- <a href="http://flowplayer.org/" target="_blank">Player Website</a>
-							<br />
-							<input type="radio" name="video_player" value="videojs" checked> VideoJS 
-							- <a href="<?php echo WP_PLUGIN_URL; ?>/s3-video/views/tips/videojs_info.html" class="jTip" id="videojsTip">More Info?</a>							
-							- <a href="http://videojs.com/" target="_blank">Player Website</a>
-					<?php } ?>		
+					<?php
+					$checked_html = " checked";
+					$flowplayer_checked = "";
+					$videojs_checked = "";
+					$jwplayer_checked = "";
+					
+					switch( $pluginSettings['amazon_s3_video_player'] ){
+						case "videojs":
+							$videojs_checked = $checked_html;
+							break;
+						case "jwplayer":
+							$jwplayer_checked = $checked_html;
+							break;
+						default:
+							$flowplayer_checked = $checked_html;
+							break;
+					}
+					?>
+					<input type="radio" name="video_player" value="flowplayer"<?php echo $flowplayer_checked; ?>> Flowplayer 
+					- <a href="<?php echo WP_PLUGIN_URL; ?>/s3-video/views/tips/flowplayer_info.html" class="jTip" id="flowplayerTip">More Info?</a> 							
+					- <a href="http://flowplayer.org/" target="_blank">Player Website</a>
+					<br />
+					<input type="radio" name="video_player" value="videojs"<?php echo $videojs_checked; ?>> VideoJS 
+					- <a href="<?php echo WP_PLUGIN_URL; ?>/s3-video/views/tips/videojs_info.html" class="jTip" id="videojsTip">More Info?</a>							
+					- <a href="http://videojs.com/" target="_blank">Player Website</a>		
+					<br />
+					<input type="radio" name="video_player" value="jwplayer"<?php echo $jwplayer_checked; ?>> JWplayer 
+					- <a href="<?php echo WP_PLUGIN_URL; ?>/s3-video/views/tips/jwplayer_info.html" class="jTip" id="jwplayerTip">More Info?</a>							
+					- <a href="http://www.longtailvideo.com/jw-player/" target="_blank">Player Website</a>	
+					
+					<br>
+					<?php /*
+					<label for="jwplayer_key"><?php echo _('JW Player Licence Key', 's3video'); ?></label>
+					<input type="text" id="jwplayer_key" name="jwplayer_key" value="<?php echo $pluginSettings['amazon_s3_video_jwplayer_key']; ?>">
+					*/?>
+					<label for="jwplayer_token"><?php echo _('JW Player Cloud Hosted Code / Token', 's3video'); ?></label>
+					<input type="text" id="jwplayer_token" name="jwplayer_token" class="required" value="<?php echo $pluginSettings['amazon_s3_video_jwplayer_token']; ?>" disabled>
 				</td>
 			</tr>			
 
@@ -280,7 +317,7 @@
 
 				<td>
 					<div align="center">
-						<input type="submit" value="Save">
+						<input type="submit" value="Save" class="button">
 					</div>
 				</td>
 			</tr>
