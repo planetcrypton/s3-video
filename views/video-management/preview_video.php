@@ -1,5 +1,12 @@
 <html>
 <head>
+	<style type="text/css">
+	<?php if( isset($_GET['tiny']) ): ?>
+	#player{width:100%;height:auto}
+	<?php else: ?>
+	#player{width:640px;height:360px}
+	<?php endif; ?>
+	</style>
 	<?php if ((empty($_GET['player'])) || ($_GET['player'] == 'flowplayer')) { ?>
 			<?php $player = 'flowplayer'; ?>
     		<script type="text/javascript" src="<?php echo $_GET['base']; ?>js/flowplayer-3.2.12.js"></script>
@@ -17,7 +24,7 @@
 	<div align="center">
 		<?php if (!empty($_GET['media'])) { ?>
 			<?php if ($player == 'flowplayer') { ?>
-						<a href="<?php echo $_GET['media']; ?>" style="display:block;width:640px;height:360px"  id="player"></a> 
+						<a href="<?php echo $_GET['media']; ?>" style="display:block;"  id="player"></a> 
 						
 						<script>
 							flowplayer("player", "<?php echo $_GET['base']; ?>misc/flowplayer-3.2.16.swf", {
