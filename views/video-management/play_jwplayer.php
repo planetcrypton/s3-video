@@ -1,6 +1,6 @@
-<div id="player{playerId}">Loading..</div>
+<div id="jwplayer_{playerId}">Loading..</div>
 <script type="text/javascript">
-    jwplayer("player{playerId}").setup({
+    jwplayer("jwplayer_{playerId}").setup({
         file: "{videoFile}",
         image: "{videoStill}",
         width: {videoWidth},

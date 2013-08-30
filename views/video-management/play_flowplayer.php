@@ -1,7 +1,7 @@
 
-<a href="{videoFile}" style="display:block;width:{videoWidth}px;height:{videoHeight}px"  id="player{playerId}"></a> 		
+<a href="{videoFile}" style="display:block;width:{videoWidth}px;height:{videoHeight}px"  id="flowplayer_{playerId}"></a> 		
 <script>
-	flowplayer("player{playerId}", '{flowplayerLocation}', {
+	flowplayer("flowplayer_{playerId}", '{flowplayerLocation}', {
 		log: { level: 'warn' },
 		clip:  {
 			autoBuffering: {videoAutoBuffer},

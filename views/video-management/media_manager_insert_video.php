@@ -30,6 +30,8 @@ jQuery(function() {
 <strong>S3 Videos</strong>
 
 <?php
+	if( !isset($pluginSettings['amazon_s3_video_jwplayer_token']) ) $pluginSettings['amazon_s3_video_jwplayer_token'] = ''; // backward compatibily
+
 	if ((!empty($existingVideos)) && (count($existingVideos) > 0)) {
 ?>
 		<table id="videoListTable" class="tablesorter" cellspacing="0" >
@@ -63,7 +65,7 @@ jQuery(function() {
 								</td>
 													
 								<td>
-									<a title="<?php echo $existingVideo['name']; ?>" href="<?php echo WP_PLUGIN_URL; ?>/s3-video/views/video-management/preview_video.php?base=<?php echo WP_PLUGIN_URL; ?>/s3-video/&player=<?php echo $pluginSettings['amazon_s3_video_player']; ?>&media=<?php echo 'http://' . $pluginSettings['amazon_video_bucket'] .'.'.$pluginSettings['amazon_url'] . '/' .urlencode($existingVideo['name']); ?>&tiny=1" class="colorBox">
+									<a title="<?php echo $existingVideo['name']; ?>" href="<?php echo WP_PLUGIN_URL; ?>/s3-video/views/video-management/preview_video.php?base=<?php echo WP_PLUGIN_URL; ?>/s3-video/&player=<?php echo $pluginSettings['amazon_s3_video_player']; ?>&jwplayer_token=<?php echo $pluginSettings['amazon_s3_video_jwplayer_token']; ?>&media=<?php echo 'http://' . $pluginSettings['amazon_video_bucket'] .'.'.$pluginSettings['amazon_url'] . '/' .urlencode($existingVideo['name']); ?>&tiny=1" class="colorBox">
 										Preview
 									</a>
 									 - 
