@@ -1,5 +1,6 @@
 <link rel="stylesheet" href="<?php echo get_bloginfo('url'); ?>/wp-content/plugins/s3-video/css/style.css?ver=3.5.1" type="text/css" media="all" />
 <link rel="stylesheet" href="<?php echo get_bloginfo('url'); ?>/wp-content/plugins/s3-video/css/colorbox.css?ver=3.5.1" type="text/css" media="all" />
+<style type="text/css">.tools{display:none;}</style>
 
 <script type="text/javascript" src="<?php echo get_bloginfo('url'); ?>/wp-admin/load-scripts.php?c=0&amp;load%5B%5D=jquery,utils&amp;ver=3.5.1"></script>
 <script type='text/javascript' src="<?php echo get_bloginfo('url'); ?>/wp-content/plugins/s3-video/js/jquery.tablesorter.js?ver=1.0"></script>
@@ -21,7 +22,9 @@ jQuery(function() {
 			jQuery("#insertVideoForm").submit();
 	  });
 	  
-	  jQuery(".colorBox").colorbox({width:"600", height:"400", top:"70px"});
+	  jQuery(".colorBox").colorbox({width:"600", height:"400", top:"70px", iframe:true});
+	  
+	  jQuery('.tools').show();// makes sure tools aren't clicked before page has loaded
 });
 </script>
 
@@ -64,8 +67,17 @@ jQuery(function() {
 									<?php echo date('j/n/Y', $existingVideo['time']); ?>
 								</td>
 													
-								<td>
-									<a title="<?php echo $existingVideo['name']; ?>" href="<?php echo WP_PLUGIN_URL; ?>/s3-video/views/video-management/preview_video.php?base=<?php echo WP_PLUGIN_URL; ?>/s3-video/&player=<?php echo $pluginSettings['amazon_s3_video_player']; ?>&jwplayer_token=<?php echo $pluginSettings['amazon_s3_video_jwplayer_token']; ?>&media=<?php echo 'http://' . $pluginSettings['amazon_video_bucket'] .'.'.$pluginSettings['amazon_url'] . '/' .urlencode($existingVideo['name']); ?>&tiny=1" class="colorBox">
+								<td class="tools">
+									<?php
+									if($pluginSettings['amazon_s3_video_jwplayer_hosted']=='cloud'){
+										$jw_param = "&jwplayer_token=".$pluginSettings['amazon_s3_video_jwplayer_token'];
+									}elseif($pluginSettings['amazon_s3_video_jwplayer_hosted']=='local'){
+										$jw_param = "&jwplayer_key=".$pluginSettings['amazon_s3_video_jwplayer_key'];
+									}else{
+										$jw_param = "";
+									}
+									?>
+									<a title="<?php echo $existingVideo['name']; ?>" href="<?php echo WP_PLUGIN_URL; ?>/s3-video/views/video-management/preview_video.php?base=<?php echo WP_PLUGIN_URL; ?>/s3-video/&player=<?php echo $pluginSettings['amazon_s3_video_player'] . $jw_param; ?>&media=<?php echo 'http://' . $pluginSettings['amazon_video_bucket'] .'.'.$pluginSettings['amazon_url'] . '/' .urlencode($existingVideo['name']); ?>&tiny=1" class="colorBox">
 										Preview
 									</a>
 									 - 

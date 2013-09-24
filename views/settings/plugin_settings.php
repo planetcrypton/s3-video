@@ -1,3 +1,6 @@
+<style type="text/css">
+.jwplayer-details{/* display:none; */padding-left: 20px;}
+</style>
 <script type="text/javascript">
 	jQuery(function() {
 			jQuery("#pluginSettings").validate({
@@ -21,7 +24,18 @@
 	
 			jQuery(':input[placeholder]').placeholder();
 			
-			
+
+			var jwplayer_details = jQuery('#jwplayer-details');
+			var showhide_jwplayer_details = function() {
+				if( jQuery('input[name = "video_player"]:checked').val() == 'jwplayer' ) {
+					jwplayer_details.show();
+				}else{
+					jwplayer_details.hide();
+				}
+			};	
+			jQuery('input[name = "video_player"]').change( showhide_jwplayer_details );
+			showhide_jwplayer_details();	
+/*
 			// Dis- or enable jwplayer_token element
 			// get enebaled when JWplayer is chosen
 			// when enabled it must be filled out since the field is required
@@ -31,12 +45,13 @@
 				}else{
 					jwplayer_token_el.prop('disabled', true).addClass('disabled');
 				}
-			}
+			};
 			var jwplayer_token_el = jQuery('#jwplayer_token');
 			jQuery('input[name = "video_player"]').change( function(evt){
 				disable_jwplayer_token( jQuery(this) )
 			});
 			disable_jwplayer_token( jQuery('input[name = "video_player"]:checked') );
+*/
 		
 	});	
 </script>
@@ -194,12 +209,28 @@
 					- <a href="http://www.longtailvideo.com/jw-player/" target="_blank">Player Website</a>	
 					
 					<br>
-					<?php /*
-					<label for="jwplayer_key"><?php echo _('JW Player Licence Key', 's3video'); ?></label>
-					<input type="text" id="jwplayer_key" name="jwplayer_key" value="<?php echo $pluginSettings['amazon_s3_video_jwplayer_key']; ?>">
-					*/?>
-					<label for="jwplayer_token"><?php echo _('JW Player Cloud Hosted Code / Token', 's3video'); ?></label>
-					<input type="text" id="jwplayer_token" name="jwplayer_token" class="required" value="<?php echo $pluginSettings['amazon_s3_video_jwplayer_token']; ?>" disabled>
+					<?php
+					$jwplayer_hosted_cloud_checked = "";
+					$jwplayer_hosted_local_checked = "";
+					
+					switch( $pluginSettings['amazon_s3_video_jwplayer_hosted'] ){
+						case "local":
+							$jwplayer_hosted_local_checked = $checked_html;
+							break;
+						default:
+							$jwplayer_hosted_cloud_checked = $checked_html;
+							break;
+					}
+					?>
+					<div id="jwplayer-details" class="jwplayer-details">
+						<input type="radio" name="jwplayer_hosted" value="cloud"<?php echo $jwplayer_hosted_cloud_checked; ?>>
+						<label for="jwplayer_token"><?php echo _('JW Player Cloud Hosted Code / Token', 's3video'); ?></label>
+						<input type="text" id="jwplayer_token" name="jwplayer_token" value="<?php echo $pluginSettings['amazon_s3_video_jwplayer_token']; ?>">
+						<br>
+						<input type="radio" name="jwplayer_hosted" value="local"<?php echo $jwplayer_hosted_local_checked; ?>>
+						<label for="jwplayer_key"><?php echo _('JW Player Licence Key for local hosted', 's3video'); ?></label>
+						<input type="text" id="jwplayer_key" name="jwplayer_key" value="<?php echo $pluginSettings['amazon_s3_video_jwplayer_key']; ?>">
+					</div>
 				</td>
 			</tr>			
 

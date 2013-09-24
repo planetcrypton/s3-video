@@ -224,6 +224,11 @@ function s3_video_preview_media()
 	require_once(WP_PLUGIN_DIR . '/s3-video/views/video-management/preview_video.php');	
 } 
 
+function print_jwplayer_key(){
+	$key = get_option('amazon_s3_video_jwplayer_key');
+	echo '<script type="text/javascript">jwplayer.key="'.$key.'";</script>';
+}
+
 /**
  * 
  * Load the player dependent Javascript
@@ -234,11 +239,19 @@ function s3_video_load_player_js()
 	wp_enqueue_script('swfobject');
 	
 	$pluginSettings = s3_video_check_plugin_settings();
-	if ((empty($pluginSettings['amazon_s3_video_player'])) || ($pluginSettings['amazon_s3_video_player'] == 'flowplayer')) {
+	if ((empty($pluginSettings['amazon_s3_video_player'])) || ($pluginSettings['amazon_s3_video_player'] == 'flowplayer')) {// flowplayer
 		wp_enqueue_script('flowPlayer', WP_PLUGIN_URL . '/s3-video/js/flowplayer-3.2.12.js', array('jquery'), '1.0');
 		wp_enqueue_script('flowPlayerPlaylist', WP_PLUGIN_URL . '/s3-video/js/jquery.playlist.js', array('jquery'), '1.0');	
-	}elseif( $pluginSettings['amazon_s3_video_player'] == 'jwplayer' && !empty($pluginSettings['amazon_s3_video_jwplayer_token']) ){
-		wp_enqueue_script('flowPlayer', 'http://jwpsrv.com/library/'.$pluginSettings['amazon_s3_video_jwplayer_token'].'.js');
+	}elseif( $pluginSettings['amazon_s3_video_player'] == 'jwplayer' && !empty($pluginSettings['amazon_s3_video_jwplayer_token']) ){// jwplayer
+		if( $pluginSettings['amazon_s3_video_jwplayer_hosted'] == 'cloud' && !empty($pluginSettings['amazon_s3_video_jwplayer_hosted']) ){ // cloud-hosted
+			wp_enqueue_script('jwPlayerCloud', 'http://jwpsrv.com/library/'.$pluginSettings['amazon_s3_video_jwplayer_token'].'.js');
+		}elseif( $pluginSettings['amazon_s3_video_jwplayer_hosted'] == 'local' && !empty($pluginSettings['amazon_s3_video_jwplayer_hosted']) ){ // local-hosted
+			wp_enqueue_script('jwPlayerLocal', plugins_url( 'js/jwplayer/jwplayer.js' , dirname(__FILE__) ));
+			// Add hook for admin <head></head>
+			#add_action('admin_head', 'print_jwplayer_key');
+			// Add hook for front-end <head></head>
+			add_action('wp_head', 'print_jwplayer_key');
+		}
 	} else {
 		// If any playlists exist load both players
 		require_once(WP_PLUGIN_DIR . '/s3-video/includes/playlist_management.php');

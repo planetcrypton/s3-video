@@ -8,9 +8,17 @@ if( isset($_GET['tiny']) )
 	<?php if ((empty($_GET['player'])) || ($_GET['player'] == 'flowplayer')) { ?>
 			<?php $player = 'flowplayer'; ?>
     		<script type="text/javascript" src="<?php echo $_GET['base']; ?>js/flowplayer-3.2.12.js"></script>
-    <?php } elseif( $_GET['player'] == 'jwplayer' ) { ?>
-    		<?php $player = 'jwplayer'; ?>
+    <?php } elseif( $_GET['player'] == 'jwplayer' ) {
+    		$player = 'jwplayer';
+    		if( isset($_GET['jwplayer_token']) && !empty($_GET['jwplayer_token']) ):
+    		?>
     		<script src="http://jwpsrv.com/library/<?php echo $_GET['jwplayer_token']; ?>.js"></script>
+    		<?php
+    		elseif( isset($_GET['jwplayer_key']) && !empty($_GET['jwplayer_key']) ):
+    		?>
+    		<script type="text/javascript" src="<?php echo $_GET['base']; ?>js/jwplayer/jwplayer.js"></script>
+    		<script type="text/javascript">jwplayer.key="<?php echo $_GET['jwplayer_key']; ?>";</script>
+    		<?php endif; ?>
      <?php } else { ?>
     		<?php $player = 'videojs'; ?>
     		<link href="<?php echo $_GET['base']; ?>css/video-js.css" rel="stylesheet">
