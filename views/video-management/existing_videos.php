@@ -80,9 +80,23 @@ $flashVars = '"autoPlay":'.$pluginSettings['amazon_s3_video_autoplay'].',"autoBu
 								</td>
 													
 								<td>
-									<a title="<?php echo $existingVideo['name']; ?>" href="<?php echo WP_PLUGIN_URL; ?>/s3-video/views/video-management/preview_video.php?base=<?php echo WP_PLUGIN_URL; ?>/s3-video/&player=<?php echo $pluginSettings['amazon_s3_video_player']; ?>&media=<?php echo 'http://' . $pluginSettings['amazon_video_bucket'] .'.'.$pluginSettings['amazon_url'] . '/' .urlencode($existingVideo['name']); ?>" class="colorBox">
+									<?php
+									if($pluginSettings['amazon_s3_video_jwplayer_hosted']=='cloud'){
+										$jw_param = "&jwplayer_token=".$pluginSettings['amazon_s3_video_jwplayer_token'];
+									}elseif($pluginSettings['amazon_s3_video_jwplayer_hosted']=='local'){
+										$jw_param = "&jwplayer_key=".$pluginSettings['amazon_s3_video_jwplayer_key'];
+									}else{
+										$jw_param = "";
+									}
+									?>
+									<a title="<?php echo $existingVideo['name']; ?>" href="<?php echo WP_PLUGIN_URL; ?>/s3-video/views/video-management/preview_video.php?base=<?php echo WP_PLUGIN_URL; ?>/s3-video/&player=<?php echo $pluginSettings['amazon_s3_video_player'] . $jw_param; ?>&media=<?php echo 'http://' . $pluginSettings['amazon_video_bucket'] .'.'.$pluginSettings['amazon_url'] . '/' .urlencode($existingVideo['name']); ?>&tiny=1" class="colorBox">
 										Preview
 									</a>
+									<!--
+<a title="<?php echo $existingVideo['name']; ?>" href="<?php echo WP_PLUGIN_URL; ?>/s3-video/views/video-management/preview_video.php?base=<?php echo WP_PLUGIN_URL; ?>/s3-video/&player=<?php echo $pluginSettings['amazon_s3_video_player']; ?>&media=<?php echo 'http://' . $pluginSettings['amazon_video_bucket'] .'.'.$pluginSettings['amazon_url'] . '/' .urlencode($existingVideo['name']); ?>" class="colorBox">
+										Preview
+									</a>
+-->
 									 - 
 									<a href="admin.php?page=s3-video&delete=<?php echo $existingVideo['name']; ?>">
 										Delete
