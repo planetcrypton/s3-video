@@ -2,7 +2,16 @@
 <link rel="stylesheet" href="<?php echo get_bloginfo('url'); ?>/wp-content/plugins/s3-video/css/colorbox.css?ver=3.5.1" type="text/css" media="all" />
 <style type="text/css">.tools{display:none;}</style>
 
-<script type="text/javascript" src="<?php echo get_bloginfo('url'); ?>/wp-admin/load-scripts.php?c=0&amp;load%5B%5D=jquery,utils&amp;ver=3.5.1"></script>
+<!-- WP 3.5 -->
+<!--<script type="text/javascript" src="<?php echo get_bloginfo('url'); ?>/wp-admin/load-scripts.php?c=0&load%5B%5D=jquery,utils&ver=3.5.1"></script>-->
+<!-- WP 3.6 -->
+<!-- <script type="text/javascript" src="<?php echo get_bloginfo('url'); ?>/wp-admin/load-scripts.php?c=1&amp;load%5B%5D=jquery-core,jquery-migrate,utils,plupload,plupload-html5,plupload-flash,plupload-silverlight,plupload-html4,json2&amp;ver=3.6.1"></script> -->
+<!--
+Current colorbox plugin uses jQuery.live() method which is deprecated sice Jquery 1.7 and removed since 1.9
+Check http://stackoverflow.com/questions/14526033/object-has-no-method-live-jquery
+So we can only load newer jQuery version when the colorbox plugin shipped with S3 is updated and vice-versa
+-->
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
 <script type='text/javascript' src="<?php echo get_bloginfo('url'); ?>/wp-content/plugins/s3-video/js/jquery.tablesorter.js?ver=1.0"></script>
 <script type='text/javascript' src="<?php echo get_bloginfo('url'); ?>/wp-content/plugins/s3-video/js/jquery.paginator.js?ver=1.0"></script>
 <script type='text/javascript' src="<?php echo get_bloginfo('url'); ?>/wp-content/plugins/s3-video/js/jquery.colorbox.js?ver=1.0"></script>
@@ -10,6 +19,7 @@
 
 
 <script type="text/javascript">
+console.log('jq',jQuery)
 jQuery(function() {
 	  var awsBucket = '<?php echo $pluginSettings['amazon_video_bucket']; ?>';
 	  jQuery("#videoListTable").tablesorter();
